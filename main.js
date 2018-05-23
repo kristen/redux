@@ -30,16 +30,19 @@ const createStore = (reducer) => {
     return { getState, dispatch, subscribe };
 }
 
+const Counter = ({value}) => (
+    <h1>{value}</h1>
+);
+
 const store = createStore(counter);
 const render = () => {
-    document.body.innerText = store.getState();
+    ReactDOM.render(
+        <Counter value={store.getState()} />,
+        document.getElementById('root')
+    );
 };
 
 store.subscribe(render);
-
-document.addEventListener('click', () => {
-    store.dispatch({ type: 'INCREMENT' });
-});
 
 window.onload = () => {
     render();
