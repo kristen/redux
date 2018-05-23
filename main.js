@@ -12,11 +12,16 @@ const { createStore } = Redux;
 // import { createStore } from 'redux';
 
 const store = createStore(counter);
-
-store.subscribe(() => {
+const render = () => {
     document.body.innerText = store.getState();
-});
+};
+
+store.subscribe(render);
 
 document.addEventListener('click', () => {
     store.dispatch({ type: 'INCREMENT' });
 });
+
+window.onload = () => {
+    render();
+}
