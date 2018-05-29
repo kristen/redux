@@ -112,9 +112,10 @@ const TodoList = ({
         )}
     </ul>
 );
+const { connect } = ReactRedux;
 
 let nextTodoId = 0;
-const AddTodo = (props, { store }) => {
+let AddTodo = ({ dispatch }) => {
     let input;
     return (
         <div>
@@ -122,7 +123,7 @@ const AddTodo = (props, { store }) => {
                 input = node;
             }} />
             <button onClick={() => {
-                store.dispatch({
+                dispatch({
                     type: 'ADD_TODO',
                     id: nextTodoId++,
                     text: input.value
@@ -134,9 +135,7 @@ const AddTodo = (props, { store }) => {
         </div>
     );
 }
-AddTodo.contextTypes = {
-    store: React.PropTypes.object
-};
+AddTodo = connect()(AddTodo);
 
 const Link = ({
     active,
@@ -223,7 +222,9 @@ const Footer = () => {
     )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToTodoListProps = (
+    state
+) => {
     return {
         todos: getVisibileTodos(
             state.todos,
@@ -232,7 +233,9 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToTodoListProps = (
+    dispatch
+) => {
     return {
         onTodoClick: (id) => {
             dispatch({
@@ -243,10 +246,9 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-const { connect } = ReactRedux;
 const VisibleTodoList = connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToTodoListProps,
+    mapDispatchToTodoListProps
 )(TodoList);
 
 const TodoApp = () => (
