@@ -6,7 +6,22 @@ import { render } from 'react-dom';
 import todoApp from './reducers';
 import TodoApp from './components/TodoApp';
 
-const store = createStore(todoApp);
+const persistedState = {
+    todos: [{
+        id: '0',
+        text: 'Learn React',
+        completed: false,
+    }, {
+        id: '1',
+        text: 'Learn Redux',
+        completed: false,
+    }],
+};
+const store = createStore(
+    todoApp,
+    persistedState
+);
+console.log(store.getState());
 
 render(
     <Provider store={store}>
