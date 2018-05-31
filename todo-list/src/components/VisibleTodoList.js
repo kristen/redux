@@ -19,8 +19,7 @@ class VisibleTodoList extends Component {
 
     fetchData() {
         // destructure here so we get the correct values before the asyn call
-        const { filter, requestTodos, fetchTodos } = this.props;
-        requestTodos(filter);
+        const { filter, fetchTodos } = this.props;
         fetchTodos(filter);
     }
 
