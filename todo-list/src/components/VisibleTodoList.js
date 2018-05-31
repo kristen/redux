@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
 const VisibilityFilters = actions.VisibilityFilters;
 import TodoList from './TodoList';
-import { getVisibileTodos } from '../reducers';
+import { getVisibileTodos, getIsFetching } from '../reducers';
 
 class VisibleTodoList extends Component {
     componentDidMount() {
@@ -19,15 +19,19 @@ class VisibleTodoList extends Component {
 
     fetchData() {
         // destructure here so we get the correct values before the asyn call
-        const { filter, fetchTodos } = this.props;
+        const { filter, requestTodos, fetchTodos } = this.props;
+        requestTodos(filter);
         fetchTodos(filter);
     }
 
     render() {
-        const { toggleTodo, ...rest } = this.props;
+        const { toggleTodo, todos, isFetching } = this.props;
+        if (isFetching && !todos.length) {
+            return <p>Loading...</p>;
+        }
         return (
             <TodoList
-                {...rest}
+                todos={todos}
                 onTodoClick={toggleTodo}
             />
         );
@@ -38,6 +42,7 @@ const mapStateToProps = (state, { match: { params }}) => {
     const filter = params.filter || VisibilityFilters.SHOW_ALL;
     return {
         todos: getVisibileTodos(state, filter),
+        isFetching: getIsFetching(state, filter),
         filter,
     };
 };

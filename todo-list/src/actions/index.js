@@ -5,7 +5,8 @@ import * as api from '../api';
 
 export const ADD_TODO = 'ADD_TODO';
 export const TOGGLE_TODO = 'TOGGLE_TODO';
-export const RECEIVE_TODO = 'RECEIVE_TODO';
+export const RECEIVE_TODOS = 'RECEIVE_TODOS';
+export const REQUEST_TODOS = 'REQUEST_TODOS';
 
 // other constants
 
@@ -17,8 +18,13 @@ export const VisibilityFilters = {
 
 // action creators
 
+export const requestTodos = (filter) => ({
+    type: REQUEST_TODOS,
+    filter,
+});
+
 const receiveTodos = (filter, response) => ({
-    type: RECEIVE_TODO,
+    type: RECEIVE_TODOS,
     filter,
     response,
 });

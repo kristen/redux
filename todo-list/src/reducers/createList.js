@@ -1,15 +1,34 @@
-import { RECEIVE_TODO } from '../actions';
+import { REQUEST_TODOS, RECEIVE_TODOS } from '../actions';
+import { combineReducers } from 'redux';
 
-const createList = (filter) => (state = [], action) => {
-    if (action.filter !== filter) {
-        return state;
-    }
-    switch (action.type) {
-        case RECEIVE_TODO:
-            return action.response.map(todo => todo.id);
-        default:
+const createList = (filter) => {
+    const ids = (state = [], action) => {
+        if (action.filter !== filter) {
             return state;
+        }
+        switch (action.type) {
+            case RECEIVE_TODOS:
+                return action.response.map(todo => todo.id);
+            default:
+                return state;
+        }
     }
+
+    const isFetching = (state = false, action) => {
+        switch (action.type) {
+            case REQUEST_TODOS:
+                return true;
+            case RECEIVE_TODOS:
+                return false;
+            default:
+                return state;
+        }
+    };
+
+    return combineReducers({
+        ids,
+        isFetching,
+    });
 };
 
 // reducer is default export
@@ -18,4 +37,6 @@ export default createList;
 // selectors
 // (in same file where structure of state is defined so we don't need to expose structure)
 
-export const getIds = (state) => state;
+export const getIds = (state) => state.ids;
+
+export const getIsFetching = (state) => state.isFetching;
