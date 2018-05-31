@@ -16,7 +16,7 @@ const fakeDatabase = {
     }, {
         id: v4(),
         text: 'Learn how to type',
-        completed: false,
+        completed: true,
     }],
 };
 

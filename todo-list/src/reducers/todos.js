@@ -1,54 +1,77 @@
 import { combineReducers } from 'redux';
-import { ADD_TODO, TOGGLE_TODO, VisibilityFilters } from "../actions";
-import todo from './todo';
+import { VisibilityFilters, RECEIVE_TODO } from "../actions";
 
 const byId = (state = {}, action) => {
     switch (action.type) {
-        case ADD_TODO:
-        case TOGGLE_TODO:
-            return {
-                ...state,
-                [action.id]: todo(state[action.id], action),
-            };
+        case RECEIVE_TODO:
+            // const nextState = { ...state }; // shallow copy
+            // action.response.forEach(todo => {
+            //     // only mutating one level deep so pure function
+            //     nextState[todo.id] = todo;
+            // });
+            // return nextState;
+            return action.response.reduce((nextState, todo) => {
+                // only mutating one level deep so pure function
+                nextState[todo.id] = todo;
+                return nextState;
+            }, { ...state } /* shallow copy */);
         default:
             return state;
     }
 };
 
 const allIds = (state = [], action) => {
+    if (action.filter !== VisibilityFilters.SHOW_ALL) {
+        return state;
+    }
     switch (action.type) {
-        case ADD_TODO:
-            return [...state, action.id];
+        case RECEIVE_TODO:
+            return action.response.map(todo => todo.id);
         default:
             return state;
     }
-}
+};
+
+const activeIds = (state = [], action) => {
+    if (action.filter !== VisibilityFilters.SHOW_ACTIVE) {
+        return state;
+    }
+    switch (action.type) {
+        case RECEIVE_TODO:
+            return action.response.map(todo => todo.id);
+        default:
+            return state;
+    }
+};
+
+const completedIds = (state = [], action) => {
+    if (action.filter !== VisibilityFilters.SHOW_COMPLETED) {
+        return state;
+    }
+    switch (action.type) {
+        case RECEIVE_TODO:
+            return action.response.map(todo => todo.id);
+        default:
+            return state;
+    }
+};
+
+const idsByFilter = combineReducers({
+    all: allIds,
+    active: activeIds,
+    completed: completedIds,
+});
 
 const todos = combineReducers({
     byId,
-    allIds,
+    idsByFilter,
 });
 
 // reducer is default export
 export default todos;
 
 // selector for todos, so put in the file where todos structure defined
-const getAllTodos = (state) =>
-    state.allIds.map(id => state.byId[id]);
-
-export const getVisibileTodos = (
-    state,
-    filter
-) => {
-    const allTodos = getAllTodos(state);
-    switch (filter) {
-        case VisibilityFilters.SHOW_ALL:
-            return allTodos;
-        case VisibilityFilters.SHOW_ACTIVE:
-            return allTodos.filter(t => !t.completed);
-        case VisibilityFilters.SHOW_COMPLETED:
-            return allTodos.filter(t => t.completed);
-        default:
-            return state;
-    }
+export const getVisibileTodos = (state, filter) => {
+    const ids = state.idsByFilter[filter];
+    return ids.map(id => state.byId[id]);
 };
