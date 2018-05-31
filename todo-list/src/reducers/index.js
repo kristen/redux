@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { VisibilityFilters } from "../actions";
+import VisibilityFilters from '../actions/visibilityFilters';
 import byId, * as fromById from './byId';
 import createList, * as fromList from './createList';
 

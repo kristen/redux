@@ -1,5 +1,6 @@
 import { v4 } from 'node-uuid';
 import * as api from '../api';
+import { getIsFetching } from '../reducers';
 
 // action types ​
 
@@ -7,14 +8,6 @@ export const ADD_TODO = 'ADD_TODO';
 export const TOGGLE_TODO = 'TOGGLE_TODO';
 export const RECEIVE_TODOS = 'RECEIVE_TODOS';
 export const REQUEST_TODOS = 'REQUEST_TODOS';
-
-// other constants
-
-export const VisibilityFilters = {
-    SHOW_ALL: 'all',
-    SHOW_COMPLETED: 'completed',
-    SHOW_ACTIVE: 'active'
-};
 
 // action creators
 
@@ -29,7 +22,10 @@ const receiveTodos = (filter, response) => ({
     response,
 });
 
-export const fetchTodos = (filter) => (dispatch) => {
+export const fetchTodos = (filter) => (dispatch, getState) => {
+    if (getIsFetching(getState(), filter)) {
+        return Promise.resolve();
+    }
     dispatch(requestTodos(filter));
     return api.fetchTodos(filter).then(response => {
         dispatch(receiveTodos(filter, response));

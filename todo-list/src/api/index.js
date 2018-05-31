@@ -1,5 +1,5 @@
 import { v4 } from 'node-uuid';
-import { VisibilityFilters } from '../actions';
+import VisibilityFilters from '../actions/visibilityFilters';
 
 // This is a fake in memory implementation of something
 // that would be implemented by calling a REST server.
@@ -24,7 +24,7 @@ const delay = (ms) =>
     new Promise(resolve => setTimeout(resolve, ms));
 
 export const fetchTodos = (filter) => {
-    return delay(500).then((() => {
+    return delay(5000).then((() => {
         switch (filter) {
             case VisibilityFilters.SHOW_ALL:
                 return fakeDatabase.todos;

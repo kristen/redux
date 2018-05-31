@@ -15,6 +15,9 @@ const createList = (filter) => {
     }
 
     const isFetching = (state = false, action) => {
+        if (action.filter != filter) {
+            return state;
+        }
         switch (action.type) {
             case REQUEST_TODOS:
                 return true;

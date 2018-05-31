@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
-const VisibilityFilters = actions.VisibilityFilters;
+import VisibilityFilters from '../actions/visibilityFilters';
 import TodoList from './TodoList';
 import { getVisibileTodos, getIsFetching } from '../reducers';
 
@@ -20,7 +20,7 @@ class VisibleTodoList extends Component {
     fetchData() {
         // destructure here so we get the correct values before the asyn call
         const { filter, fetchTodos } = this.props;
-        fetchTodos(filter);
+        fetchTodos(filter).then(() => console.log('done!'));
     }
 
     render() {
