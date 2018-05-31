@@ -1,4 +1,4 @@
-import { ADD_TODO, TOGGLE_TODO } from "../actions";
+import { ADD_TODO, TOGGLE_TODO, VisibilityFilters } from "../actions";
 
 const todo = (state, action) => {
     switch (action.type) {
@@ -34,4 +34,22 @@ const todos = (state = [], action) => {
     }
 };
 
+// reducer is default export
 export default todos;
+
+// selector for todos, so put in the file where todos structure defined
+export const getVisibileTodos = (
+    state,
+    filter
+) => {
+    switch (filter) {
+        case VisibilityFilters.SHOW_ALL:
+            return state;
+        case VisibilityFilters.SHOW_ACTIVE:
+            return state.filter(t => !t.completed);
+        case VisibilityFilters.SHOW_COMPLETED:
+            return state.filter(t => t.completed);
+        default:
+            return state;
+    }
+};
