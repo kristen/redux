@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { toggleTodo, VisibilityFilters } from '../actions';
+import * as actions from '../actions';
+const VisibilityFilters = actions.VisibilityFilters;
 import TodoList from './TodoList';
 import { getVisibileTodos } from '../reducers';
-import { fetchTodos } from '../api';
 
 class VisibleTodoList extends Component {
     componentDidMount() {
@@ -18,13 +18,19 @@ class VisibleTodoList extends Component {
     }
 
     fetchData() {
-        fetchTodos(this.props.filter).then(todos =>
-            console.log(this.props.filter, todos)
-        );
+        // destructure here so we get the correct values before the asyn call
+        const { filter, fetchTodos } = this.props;
+        fetchTodos(filter);
     }
 
     render() {
-        return <TodoList {...this.props} />;
+        const { toggleTodo, ...rest } = this.props;
+        return (
+            <TodoList
+                {...rest}
+                onTodoClick={toggleTodo}
+            />
+        );
     }
 }
 
@@ -38,7 +44,7 @@ const mapStateToProps = (state, { match: { params }}) => {
 
 VisibleTodoList = withRouter(connect(
     mapStateToProps,
-    { onTodoClick: toggleTodo }
+    actions
 )(VisibleTodoList));
 
 export default VisibleTodoList;
