@@ -17,10 +17,10 @@ const AddTodo = ({ dispatch }) => {
             </button>
         </div>
     );
-}
+};
 
 AddTodo.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
 };
 
 export default connect()(AddTodo);
