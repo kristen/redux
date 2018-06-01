@@ -1,8 +1,8 @@
-import {  RECEIVE_TODOS } from "../actions";
+import { FETCH_TODOS_SUCCESS } from "../actions";
 
 const byId = (state = {}, action) => {
     switch (action.type) {
-        case RECEIVE_TODOS:
+        case FETCH_TODOS_SUCCESS:
             return action.response.reduce((nextState, todo) => {
                 // only mutating one level deep so pure function
                 nextState[todo.id] = todo;
