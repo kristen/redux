@@ -1,10 +1,10 @@
-import { v4 } from 'node-uuid';
 import * as api from '../api';
 import { getIsFetching } from '../reducers';
 
 // action types ​
 
-export const ADD_TODO = 'ADD_TODO';
+export const ADD_TODO_SUCCESS = 'ADD_TODO_SUCCESS';
+export const ADD_TODO_FAILURE = 'ADD_TODO_FAILURE';
 export const TOGGLE_TODO = 'TOGGLE_TODO';
 export const FETCH_TODOS_REQUEST = 'FETCH_TODOS_REQUEST';
 export const FETCH_TODOS_SUCCESS = 'FETCH_TODOS_SUCCESS';
@@ -38,11 +38,20 @@ export const fetchTodos = (filter) => (dispatch, getState) => {
     );
 };
 
-export const addTodo = (text) => ({
-    type: ADD_TODO,
-    id: v4(),
-    text,
-});
+export const addTodo = (text) => (dispatch) =>
+    api.addTodo(text).then(response => {
+        dispatch({
+            type: ADD_TODO_SUCCESS,
+            response,
+        });
+    },
+    error => {
+        dispatch({
+            type: ADD_TODO_FAILURE,
+            message: error.message || 'Something went wrong.',
+        })
+    }
+);
 
 export const toggleTodo = (id) => ({
     type: TOGGLE_TODO,
