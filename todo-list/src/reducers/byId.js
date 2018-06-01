@@ -1,21 +1,11 @@
-import { FETCH_TODOS_SUCCESS, ADD_TODO_SUCCESS } from "../actions";
-
 const byId = (state = {}, action) => {
-    switch (action.type) {
-        case FETCH_TODOS_SUCCESS:
-            return action.response.reduce((nextState, todo) => {
-                // only mutating one level deep so pure function
-                nextState[todo.id] = todo;
-                return nextState;
-            }, { ...state } /* shallow copy */);
-        case ADD_TODO_SUCCESS:
-            return {
-                ...state,
-                [action.response.id]: action.response,
-            };
-        default:
-            return state;
+    if (action.response) {
+        return {
+            ...state,
+            ...action.response.entities.todos,
+        };
     }
+    return state;
 };
 
 // reducer is default export
