@@ -6,8 +6,7 @@ import { getIsFetching } from '../reducers';
 // action types ​
 
 export const ADD_TODO_SUCCESS = 'ADD_TODO_SUCCESS';
-export const ADD_TODO_FAILURE = 'ADD_TODO_FAILURE';
-export const TOGGLE_TODO = 'TOGGLE_TODO';
+export const TOGGLE_TODO_SUCCESS = 'TOGGLE_TODO_SUCCESS';
 export const FETCH_TODOS_REQUEST = 'FETCH_TODOS_REQUEST';
 export const FETCH_TODOS_SUCCESS = 'FETCH_TODOS_SUCCESS';
 export const FETCH_TODOS_FAILURE = 'FETCH_TODOS_FAILURE';
@@ -46,16 +45,14 @@ export const addTodo = (text) => (dispatch) =>
             type: ADD_TODO_SUCCESS,
             response: normalize(response, schema.todo),
         });
-    },
-    error => {
-        dispatch({
-            type: ADD_TODO_FAILURE,
-            message: error.message || 'Something went wrong.',
-        })
     }
 );
 
-export const toggleTodo = (id) => ({
-    type: TOGGLE_TODO,
-    id,
-});
+export const toggleTodo = (id) => (dispatch) =>
+    api.toggleTodo(id).then(response => {
+        dispatch({
+            type: TOGGLE_TODO_SUCCESS,
+            response: normalize(response, schema.todo),
+        });
+    }
+);
